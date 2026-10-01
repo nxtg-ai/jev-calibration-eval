@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "purpose": "Per-model documented sampling validity, read by the harness (LOCAL arms map the numeric 'recommended' block onto ollama options; every arm's model_id must be a verbatim key here). A run using sampling a model's provider documents as degrading (e.g. greedy on Qwen3) is treated as config-confounded.",
+    "scope": "Public subset: only the five models used by the Jev calibration study v1.",
+    "updated": "2026-09-30"
+  },
+  "models": {
+    "qwen3-14b": {
+      "family": "qwen",
+      "greedy_ok": false,
+      "recommended": {
+        "non_thinking": {
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "top_k": 20,
+          "min_p": 0,
+          "presence_penalty": 1.5
+        },
+        "thinking": {
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 20
+        }
+      },
+      "note": "Qwen3-family models are documented to degrade under greedy decoding, so greedy_ok=false. temperature/top_p/top_k are the Qwen3 card values and hold across quantization. presence_penalty 1.5 comes from the AWQ card and is not confirmed for the GGUF build; the pre-run check (prereg A1/A4.3) measured whether it moves first-token logprobs.",
+      "source": "Qwen3 model cards (https://huggingface.co/Qwen/Qwen3-14B)",
+      "sampling_exposed": true,
+      "output_cap_exposed": true
+    },
+    "Qwen3-Coder-30B-A3B": {
+      "family": "qwen",
+      "greedy_ok": false,
+      "recommended": {
+        "non_thinking": {
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "top_k": 20,
+          "repetition_penalty": 1.05
+        }
+      },
+      "note": "MoE (30B total / 3B active). The official card recommends the sampling above and is silent on greedy decoding; greedy_ok=false is the conservative Qwen3-family default, not a claim the card warns against greedy. ollama maps repetition_penalty to repeat_penalty. Run only when the free-VRAM precondition holds (it did not in v1; see the results).",
+      "source": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct (verified 2026-09-29: 'We suggest using temperature=0.7, top_p=0.8, top_k=20, repetition_penalty=1.05'; card contains no greedy-decoding warning)",
+      "sampling_exposed": true,
+      "output_cap_exposed": true
+    },
+    "gpt-oss:20b": {
+      "family": "openai-gpt-oss",
+      "greedy_ok": false,
+      "recommended": {
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "note": "openai/gpt-oss README, Recommended Sampling Parameters: 'We recommend sampling with temperature=1.0 and top_p=1.0.' Mode-agnostic single block; the LOCAL arm reads it as-is."
+      },
+      "note": "Reasoning model (harmony format). greedy_ok=false: OpenAI's README recommends temperature=1.0/top_p=1.0 and gives no greedy-ok citation. In v1 the pre-run check found the first generated token is the harmony channel header, so a first-token label read is infeasible and this arm did not run.",
+      "source": "https://github.com/openai/gpt-oss/blob/main/README.md#recommended-sampling-parameters (README.md:574-576, verified raw 2026-09-30) + https://huggingface.co/openai/gpt-oss-20b + https://ollama.com/library/gpt-oss",
+      "sampling_exposed": true,
+      "output_cap_exposed": true
+    },
+    "claude-opus-5-5": {
+      "family": "anthropic",
+      "greedy_ok": true,
+      "sampling_exposed": false,
+      "output_cap_exposed": false,
+      "note": "Run via `claude -p`. Print mode exposes no temperature control, so sampling is provider-default; the arm logs that as a labelled string rather than a number.",
+      "source": "Anthropic (no documented greedy-degradation contraindication; mirrors claude-opus-4-8). claude -p sampling is provider-managed.",
+      "access_path": "claude-cli-print"
+    },
+    "jev-1.13.0": {
+      "family": "typesafe",
+      "greedy_ok": true,
+      "sampling_exposed": false,
+      "output_cap_exposed": false,
+      "note": "Hosted structured-decision API. Exposes no caller-settable sampling parameters (temperature/top_p/top_k/seed). Probabilities come from the returned choice/score probabilities or noul (prereg section 2). Measured as non-deterministic (prereg A7).",
+      "source": "https://docs.typesafe.ai (structured-decision API; no text-generation sampling knobs exposed)",
+      "access_path": "typesafe-systemone-api"
+    }
+  }
+}

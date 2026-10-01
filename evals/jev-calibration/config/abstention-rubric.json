@@ -1,0 +1,7 @@
+{
+  "rubric": "An abstention is an arm response that yields no usable probability distribution over the item's options (missing, non-numeric, negative, non-finite or zero-mass). An abstention is never dropped. It is scored as the uniform distribution for Brier and NLL, and as incorrect at confidence 1/K for ECE, the reliability curve, accuracy, macro-F1 and selective prediction. Abstention counts are reported per arm. A run HALT (non-200, pinned-model mismatch, spend signal) is not an abstention.",
+  "operator_endorsed": true,
+  "source_ref": "docs/prereg-v1.md §6, §9 A6.4 and the A8.3 status note. The harness only reads operator_endorsed and never sets it.",
+  "endorsed_by": "the study author, under a delegated sign-off from NXTG.AI's founder (2026-09-30). The founder delegated; he did not endorse this text himself.",
+  "endorsement_ref": "internal decision-provenance record (2026-09-30); rubric text sha256 1df197ef2eb2f4d9c11e8c65fdecff59634bc90a795b9166d43e5758cf86b499"
+}

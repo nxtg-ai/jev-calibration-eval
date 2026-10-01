@@ -1,0 +1,57 @@
+run jevcal-d2b-3arm-20261001T043407Z: 1214 S1 records, 160 items (129 test), FRONTIER subset (S1 part) 47
+
+H1 (JEV, test split, raw probabilities)
+slice        n  d  ece_mass  ece_width  bins  verdict
+S1-choice   46  1  0.2002    0.2028     9   not calibrated as claimed
+S1-choice   46  2  0.1977    0.2074     9   not calibrated as claimed
+S1-choice   46  3  0.1876    0.1985     9   not calibrated as claimed
+           claim across draws: not calibrated as claimed
+S1-noul     83  1  0.0780    0.0980    11   roughly calibrated
+S1-noul     83  2  0.1023    0.0864    11   binning-sensitive
+S1-noul     83  3  0.0769    0.0988    11   roughly calibrated
+           claim across draws: draw-sensitive
+
+H2 (does LOCAL-P match on this class?)  C = all test items, FRONTIER at draw 1; A = FRONTIER subset, every arm at draw d
+slice      read d  n   acc_L  acc_J  acc_F  best      gap_L-best  bUCI_L  bUCI_J  verdict
+S1-choice  C    1  46   0.630  0.739  0.739  FRONTIER  -0.1087     0.9546  0.6415  does not
+S1-noul    C    1  83   0.892  0.867  0.952  FRONTIER  -0.0602     0.3338  0.2910  does not
+S1-choice  C    2  46   0.630  0.739  0.739  FRONTIER  -0.1087     0.9546  0.6266  does not
+S1-noul    C    2  83   0.892  0.867  0.952  FRONTIER  -0.0602     0.3338  0.2868  does not
+S1-choice  C    3  46   0.630  0.739  0.739  FRONTIER  -0.1087     0.9546  0.6282  does not
+S1-noul    C    3  83   0.892  0.867  0.952  FRONTIER  -0.0602     0.3338  0.2850  does not
+S1-choice  A    1  17   0.765  0.941  0.882  JEV       -0.1765     0.8601  0.4198  does not
+S1-noul    A    1  30   0.933  0.900  0.933  FRONTIER  +0.0000     0.2602  0.3019  matches on this class
+S1-choice  A    2  17   0.765  0.941  0.824  JEV       -0.1765     0.8601  0.4061  does not
+S1-noul    A    2  30   0.933  0.900  0.933  FRONTIER  +0.0000     0.2602  0.2915  matches on this class
+S1-choice  A    3  17   0.765  0.941  0.882  JEV       -0.1765     0.8601  0.4209  does not
+S1-noul    A    3  30   0.933  0.900  0.933  FRONTIER  +0.0000     0.2602  0.2902  matches on this class
+S1-choice  claim (Read C governs): does not   Read C ['does not']  Read A ['does not']
+S1-noul    claim (Read C governs): does not   Read C ['does not']  Read A ['matches on this class']
+
+Per arm, test split, draw 1 (H3 = coverage at >=95% precision)
+arm       slice        n  acc    brier  ece_mass ece_width cov@95  macroF1
+LOCAL-P   S1-choice   46  0.630  0.702  0.344    0.347     0.09    0.549
+LOCAL-P   S1-noul     83  0.892  0.202  0.103    0.105     0.82    0.891
+JEV       S1-choice   46  0.739  0.441  0.200    0.203     0.48    0.693
+JEV       S1-noul     83  0.867  0.193  0.078    0.098     0.81    0.864
+FRONTIER  S1-choice   46  0.739  0.382  0.159    0.179     0.46    0.703
+FRONTIER  S1-noul     83  0.952  0.071  0.063    0.069     1.00    0.952
+
+Sub-slices by tag (test, draw 1, accuracy)
+  cuad               n=129  LOCAL-P 0.798  JEV 0.822  FRONTIER 0.876
+  hard_negative      n= 44  LOCAL-P 0.932  JEV 0.977  FRONTIER 0.932
+  jev_weak:dates     n= 27  LOCAL-P 0.667  JEV 0.704  FRONTIER 0.778
+  jev_weak:numeric   n= 18  LOCAL-P 0.833  JEV 0.833  FRONTIER 0.944
+
+S1-only figures (NOT the figures in the results document, which pool S1 and S2):
+  paired Brier LOCAL-P - JEV (test, n=129): +0.098 [+0.011, +0.195]
+  paired Brier JEV - FRONTIER (test, n=129): +0.100 [+0.038, +0.164]
+  paired Brier LOCAL-P - FRONTIER (test, n=129): +0.198 [+0.102, +0.298]
+  LOCAL-P   draw 1, all 160 S1 items: p50 0.417 s, p95 0.584 s, list cost per decision $0.0000000
+  JEV       draw 1, all 160 S1 items: p50 0.148 s, p95 0.218 s, list cost per decision $0.0000439
+  FRONTIER  draw 1, all 160 S1 items: p50 4.748 s, p95 8.783 s, list cost per decision $0.0203675
+  jitter LOCAL-P   items 160  mean |dp| 0.0000  max |dp| 0.00  answer flips 0.000
+  jitter JEV       items 160  mean |dp| 0.0022  max |dp| 0.10  answer flips 0.000
+  jitter FRONTIER  items  47  mean |dp| 0.0078  max |dp| 0.24  answer flips 0.021
+
+wrote results/jevcal-d2b-3arm-20261001T043407Z-S1/reproduce-s1.json
