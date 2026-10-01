@@ -13,6 +13,8 @@ By [NXTG.AI](https://nxtg.ai). Run 2026-10-01.
 
 Full write-up: [`docs/results-v1.md`](docs/results-v1.md). Bars, metrics and every amendment, all fixed before the data: [`docs/prereg-v1.md`](docs/prereg-v1.md).
 
+**Part 2, pre-registered before any of its calls:** does retrieved context from our memory store beat model choice on the private routing classes? [`docs/prereg2-v1.md`](docs/prereg2-v1.md). Its results will be added here.
+
 ## What is in this repo, and what is private
 
 The study has two halves.
