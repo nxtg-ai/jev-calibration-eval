@@ -13,7 +13,16 @@ By [NXTG.AI](https://nxtg.ai). Run 2026-10-01.
 
 Full write-up: [`docs/results-v1.md`](docs/results-v1.md). Bars, metrics and every amendment, all fixed before the data: [`docs/prereg-v1.md`](docs/prereg-v1.md).
 
-**Part 2, pre-registered before any of its calls:** does retrieved context from our memory store beat model choice on the private routing classes? [`docs/prereg2-v1.md`](docs/prereg2-v1.md). Its results will be added here.
+## Part 2 in brief: context vs model choice
+
+Pre-registered and made public before any of its calls ([`docs/prereg2-v1.md`](docs/prereg2-v1.md)). Each model got the five most similar *earlier* records from our memory store, with their labels, on the three private routing classes:
+
+- **Context helps a lot when the past holds the answer.** On "which agent team wrote this post", Jev rose 25 points and Opus 50 (0.23 → 0.73). On "which team owns this commitment", Opus rose 23 points; Jev showed no clear effect.
+- **No clear effect on "which program owns this work item"** for either model. The correct program appeared among the five neighbours on only 13 of 48 items. That question needs structure (the graph), not similar text.
+- **Memory alone** (a majority vote of the neighbours) matches Opus-without-context on one class, at about five times chance, and trails it on another.
+- **Model choice still matters with context.** Opus scored higher than Jev in every class, at about 470× the list cost. On the commitment-owner class, context raised Jev's confidence by 25 points and its accuracy by only 4.
+
+Full write-up: [`docs/results2-v1.md`](docs/results2-v1.md). Recompute every accuracy, ECE, interval and verdict: `python3 scripts/reproduce_s2_context.py`.
 
 ## What is in this repo, and what is private
 
@@ -39,6 +48,8 @@ The directory layout mirrors the internal repository, because the harness locate
 | [`governance/evals/jev-calibration/local-precheck/`](governance/evals/jev-calibration/local-precheck/) | One LOCAL precheck receipt, kept as a test fixture (the cache-confounded receipt the certifying binding must refuse) |
 | [`results/jevcal-d2b-3arm-20261001T043407Z-S1/`](results/jevcal-d2b-3arm-20261001T043407Z-S1/) | The reported run's S1 records: `raw-s1.jsonl` (1,214 per-call records: LOCAL-P 480, JEV 480, FRONTIER 254) and `secondary-s1.jsonl` (235 FRONTIER single-letter samples), plus the reproducer's output |
 | [`scripts/reproduce_s1.py`](scripts/reproduce_s1.py) | Recomputes every S1 number from the records with the shipped scorer |
+| [`results/jevctx-p2-20261002T000132Z-S2/per-item.csv`](results/jevctx-p2-20261002T000132Z-S2/per-item.csv) | Part 2: one row per run, arm and S2 test item (1,296 rows). Opaque item id, class, number of options, correct (0/1), top-1 probability. No text, no labels |
+| [`scripts/reproduce_s2_context.py`](scripts/reproduce_s2_context.py) | Recomputes every Part 2 accuracy, ECE, interval and verdict word from that file with the shipped scorer |
 | [`deploy/langfuse/eval_rail_trace.py`](deploy/langfuse/eval_rail_trace.py) | The optional LangFuse tracer the runner imports (keys from env only) |
 | [`docs/`](docs/) | Public copies of the pre-registration and the results |
 
